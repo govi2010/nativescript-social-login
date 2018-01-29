@@ -7,3 +7,6 @@
 /src/node_modules
 /src/hooks
 *.log
+.idea/*
+.vscode/settings.json
+demo/giddh.keystore
