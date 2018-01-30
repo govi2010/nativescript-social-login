@@ -35,6 +35,7 @@ export class SocialLogin extends Social {
 	private _googleProfileInfoCallback;
 	private googleFailCallback;
 	private googleSignIn = null;
+	private twitterSignIn = null;
 	private googleCancelCallback;
 	private googleSuccessCallback;
 
@@ -67,6 +68,14 @@ export class SocialLogin extends Social {
 
 			result.google.isInitialized = true;
 		}
+
+		if (this.Config.twitter) {
+
+			this.twitterSignIn = Twitter.sharedInstance();
+			this.twitterSignIn.startWithConsumerKeyConsumerSecret(this.Config.twitter.key, this.Config.twitter.secret);
+			result.twitter.isInitialized = true;
+		}
+
 
 		return result;
 	}
@@ -325,6 +334,30 @@ export class SocialLogin extends Social {
 		}
 	}
 
-	public loginWithTwitter(callback: (result: Partial<ILoginResult>) => void) { }
+	public loginWithTwitter(callback: (result: Partial<ILoginResult>) => void) {
+
+		this.twitterSignIn.logInWithCompletion(
+			(session, error) => {
+				if (session != null) {
+					callback({
+						authCode: session.authToken,
+						code: LoginResultType.Success,
+						displayName: session.userName,
+						error: error,
+						id: session.userID,
+						userToken: session.authTokenSecret
+					});
+					// print("signed in as \(String(describing: session?.userName))");
+				} else {
+					callback({
+						code: LoginResultType.Exception,
+						error: error,
+					})
+					// print("error: \(String(describing: error?.localizedDescription))");
+				}
+			}
+
+		);
+	}
 }
 

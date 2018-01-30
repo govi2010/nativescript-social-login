@@ -24,7 +24,7 @@ import { android as Android, AndroidApplication, AndroidActivityResultEventData 
 import { isNullOrUndefined } from "tns-core-modules/utils/types";
 import { IInitializationResult, ILoginResult, LoginResultType, Social, LOGTAG_INIT_ENV, LOGTAG_LOGIN_WITH_FB, LOGTAG_LOGIN_WITH_GOOGLE } from "./SocialLogin-common";
 
-declare const com, java;
+declare const com, java, io;
 
 const LOGTAG_FB_LOGIN_MGR = "com.facebook.login.LoginManager";
 const LOGTAG_ON_ACTIVITY_RESULT = "onActivityResult()";
@@ -42,6 +42,7 @@ export class SocialLogin extends Social {
     private _rcFacebookSignIn: number = 64206; // < 16 bits
     private _fbCallbackManager;
     private _fbLoginManager;
+    private twitterAuthClient;
 
     init(result: IInitializationResult): IInitializationResult {
         this.logMsg("activity: " + this.Config.activity, LOGTAG_INIT_ENV);
@@ -230,25 +231,37 @@ export class SocialLogin extends Social {
 
             const uiAction = new actionRunnable();
             uiAction.action = () => {
-                const twitterAuthCfg = new com.twitter.sdk.android.core.TwitterAuthConfig(this.Config.twitter.key, this.Config.twitter.secret);
+                // const twitterAuthCfg = new com.twitter.sdk.android.core.TwitterAuthConfig(this.Config.twitter.key, this.Config.twitter.secret);
 
-                const twitter = com.twitter.sdk.android.Twitter(twitterAuthCfg);
-                twitter.logIn(this.Config.activity, new com.twitter.sdk.android.core.Callback({
-                    success(result) {
-                        invokeForTwitterResult({
-                            code: LoginResultType.Success,
-                            authToken: result.data.getAuthToken().token,
-                            userToken: result.data.getUserName(),
-                            displayName: result.data.getUserName()
-                        });
+                // const twitter = com.twitter.sdk.android.Twitter(twitterAuthCfg);
+                // twitter.logIn(this.Config.activity, new com.twitter.sdk.android.core.Callback({
+                //     success(result) {
+                //         invokeForTwitterResult({
+                //             code: LoginResultType.Success,
+                //             authToken: result.data.getAuthToken().token,
+                //             userToken: result.data.getUserName(),
+                //             displayName: result.data.getUserName()
+                //         });
+                //     },
+                //     failure(ex) {
+                //         invokeForTwitterResult({
+                //             code: LoginResultType.Failed,
+                //             error: ex.getMessage()
+                //         });
+                //     }
+                // }));
+
+                this.twitterAuthClient.authorize(this.Config.activity, {
+                    success: (result) => {
+                        //feedback
+                        // Toast.makeText(getApplicationContext(), "Login worked", Toast.LENGTH_LONG).show();
                     },
-                    failure(ex) {
-                        invokeForTwitterResult({
-                            code: LoginResultType.Failed,
-                            error: ex.getMessage()
-                        });
+                    failure: (e) => {
+                        //feedback
+                        // Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_LONG).show();
                     }
-                }));
+                });
+
             };
 
             this.Config.activity.runOnUiThread(uiAction);
@@ -399,22 +412,25 @@ export class SocialLogin extends Social {
 
     // TODO
     private initTwitter(result: IInitializationResult): IInitializationResult {
-        // try {
-        //     var twitterAuthCfg = new com.twitter.sdk.android.core.TwitterAuthConfig(
-        //         this.Config.twitter.key,
-        //         this.Config.twitter.secret);
+        try {
+            var twitterAuthCfg = new com.twitter.sdk.android.core.TwitterAuthConfig(
+                this.Config.twitter.key,
+                this.Config.twitter.secret);
 
-        //     io.fabric.sdk.android.Fabric.with(
-        //         this.Config.activity,
-        //         new com.twitter.sdk.android.core.TwitterCore(twitterAuthCfg));
+            io.fabric.sdk.android.Fabric.with(
+                this.Config.activity,
+                new com.twitter.sdk.android.core.TwitterCore(twitterAuthCfg));
+            this.twitterAuthClient = new com.twitter.sdk.android.core.identity.TwitterAuthClient();
 
-        //     result.twitter.isInitialized = true;
-        // }
-        // catch (e) {
-        //     this.logMsg('[ERROR] init.twitter: ' + e, LOGTAG_INIT_ENV);
 
-        //     result.twitter.error = e;
-        // }
+
+            result.twitter.isInitialized = true;
+        }
+        catch (e) {
+            this.logMsg('[ERROR] init.twitter: ' + e, LOGTAG_INIT_ENV);
+
+            result.twitter.error = e;
+        }
         return result;
     }
 

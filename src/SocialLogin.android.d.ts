@@ -4,6 +4,7 @@ export declare class SocialLogin extends Social {
     private _rcFacebookSignIn;
     private _fbCallbackManager;
     private _fbLoginManager;
+    private twitterAuthClient;
     init(result: IInitializationResult): IInitializationResult;
     loginWithFacebook(callback: (result: Partial<ILoginResult>) => void): void;
     loginWithGoogle(callback: (result: Partial<ILoginResult>) => void): void;

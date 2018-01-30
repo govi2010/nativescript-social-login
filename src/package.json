@@ -27,7 +27,8 @@
     "name": "Marcel Joachim Kloubert",
     "email": "marcel.kloubert@gmx.net"
   },
-  "contributors": [{
+  "contributors": [
+    {
       "name": "Brad Martin",
       "email": "bmartin@nstudio.io",
       "url": "https://github.com/bradmartin"
@@ -60,8 +61,8 @@
     "dev": "tsc -w",
     "next": "npm publish --tag next",
     "lint": "tslint --project tsconfig.json --config tslint.json",
-    "demo.android": "npm run preparedemo && cd ../demo && tns platform remove android && tns run android --justlaunch",
-    "demo.ios": "npm run preparedemo && cd ../demo && tns run ios --emulator",
+    "demo.android": "npm run preparedemo && cd ../demo && tns platform remove android && tns debug android --chrome",
+    "demo.ios": "npm run preparedemo && cd ../demo && tns debug ios --emulator --chrome",
     "demo.ios.device": "npm run preparedemo && cd ../demo && tns platform remove ios && tns run ios",
     "development.setup": "npm run setup && npm link && cd ../demo && npm link nativescript-social-login && cd ../src",
     "preparedemo": "npm run build && cd ../demo && tns plugin remove nativescript-social-login && tns plugin add ../src && tns install",
@@ -75,6 +76,9 @@
   },
   "homepage": "https://github.com/mkloubert/nativescript-social-login",
   "readmeFilename": "README.md",
+  "dependencies": {
+    "fs-extra": "5.0.0"
+  },
   "devDependencies": {
     "babel-traverse": "6.25.0",
     "babel-types": "6.25.0",

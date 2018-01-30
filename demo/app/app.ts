@@ -10,25 +10,28 @@ declare var android: any;
 // declare var UIApplication: any;
 // declare var UIApplicationDelegate: any;
 
-declare class UIResponder {};
-declare class UIApplicationDelegate{};
+declare class UIResponder { };
+declare class UIApplicationDelegate { };
 declare class FBSDKApplicationDelegate {
-  static sharedInstance():any;
+  static sharedInstance(): any;
 };
 
 declare class GGLContext {
-  static sharedInstance():any;
+  static sharedInstance(): any;
 };
 
+declare class Twitter {
+  static sharedInstance(): any;
+}
 declare class GIDSignIn {
-  static sharedInstance():any;
+  static sharedInstance(): any;
 };
 
-declare class FBSDKAppEvents{
+declare class FBSDKAppEvents {
   static activateApp();
 };
-declare class UIApplication {};
-declare class NSDictionary {};
+declare class UIApplication { };
+declare class NSDictionary { };
 
 
 if (application.ios) {
@@ -51,14 +54,19 @@ if (application.ios) {
 
       const fcbDelegate = FBSDKApplicationDelegate.sharedInstance().applicationDidFinishLaunchingWithOptions(application, launchOptions); // facebook login delegate
 
+      // Twitter.sharedInstance().start({ withConsumerKey: "PhEY2E7qF6C2dVGA1neUPNNp2", consumerSecret: "XfcVQAZRi0lcnXjhOOGp3En0vOvJj6tMmcAnZoMKMPcnTNKK95" });
       return gglDelegate || fcbDelegate;
     }
 
     applicationOpenURLSourceApplicationAnnotation(application, url, sourceApplication, annotation) {
       const fcbDelegate = FBSDKApplicationDelegate.sharedInstance().applicationOpenURLSourceApplicationAnnotation(application, url, sourceApplication, annotation); // facebook login delegate
       const gglDelegate = GIDSignIn.sharedInstance().handleURLSourceApplicationAnnotation(url, sourceApplication, annotation); // google login delegate
+      // Twitter.sharedInstance().application(app,url,options)
 
       return fcbDelegate || gglDelegate;
+    }
+    applicationOpenURLOptions(app, url, options){
+      return Twitter.sharedInstance().applicationOpenURLOptions(app,url,options);
     }
   }
 

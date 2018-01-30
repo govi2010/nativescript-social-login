@@ -5,6 +5,7 @@ export declare class SocialLogin extends Social {
     private _googleProfileInfoCallback;
     private googleFailCallback;
     private googleSignIn;
+    private twitterSignIn;
     private googleCancelCallback;
     private googleSuccessCallback;
     init(result: IInitializationResult): IInitializationResult;

@@ -39,6 +39,10 @@
             <Image src="~/img/XzoRm.png"
                    visibility="{{ initResult &amp;&amp; initResult.google.isInitialized ? 'visible' : 'collapsed' }}"
                    tap="{{ loginWithGoogle }}" />
+                    <!-- Google login -->
+            <Image src="~/img/XzoRm.png"
+                   visibility="{{ initResult &amp;&amp; initResult.twitter.isInitialized ? 'visible' : 'collapsed' }}"
+                   tap="{{ loginWithTwitter }}" />
 
             <GridLayout rows="auto,*" columns="*"
                         horizontalAlignment="stretch" verticalAlignment="stretch"

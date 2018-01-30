@@ -306,7 +306,12 @@ export abstract class Social {
                 this.loginWithFacebook(callback);
                 break;
             }
-
+            case "twitter":
+            case "tw": {
+                this.logMsg("Will use Facebook SDK...");
+                this.loginWithTwitter(callback);
+                break;
+            }
             // TODO
             /* case "twitter":
                 this.loginWithTwitter(callback);
