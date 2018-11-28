@@ -68,8 +68,9 @@ export interface IInitializationResult {
 export interface IConfig {
     /**
      * The underlying custom activity to use.
+     * @type android.app.Activity
      */
-    activity: android.app.Activity;
+    activity: any;
     /**
      * Facebook specific configuration.
      */
@@ -160,6 +161,7 @@ export declare enum LoginResultType {
 export declare const LOGTAG_INIT_ENV = "initEnvironment()";
 export declare const LOGTAG_LOGIN_WITH_FB = "loginWithFacebook()";
 export declare const LOGTAG_LOGIN_WITH_GOOGLE = "loginWithGoogle()";
+export declare const LOGTAG_LOGOUT = "logout()";
 export declare abstract class Social {
     protected Config: ILoginConfiguration;
     protected _getLoggers: () => ILogger[];
